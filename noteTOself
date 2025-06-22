@@ -1,0 +1,8 @@
+to update git repo you need to do:
+
+git add .
+git commit -m "put a message here"
+
+then run
+
+git push --force
