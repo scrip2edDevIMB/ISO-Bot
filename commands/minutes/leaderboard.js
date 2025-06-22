@@ -21,7 +21,7 @@ module.exports = {
 
 		const leaderboard = users.map((user, index) => {
 			const member = interaction.guild.members.cache.get(user.discordId);
-			const displayName = member ? member.displayName : `User ID: ${user.discordId}`;
+			const displayName = member ? member.displayName : user.discordId;
 			return `**${index + 1}.** ${displayName} — \`${user.minutes} minutes\``;
 		}).join('\n');
 
