@@ -10,7 +10,7 @@ module.exports = {
     .addUserOption(o => o.setName('user').setDescription('User to add').setRequired(true)),
 
   async execute(interaction) {
-   hasPermission(interaction.member, { minimumRole: '[SSFC] Senior Security Officer', higherRolesAllowed: true, allowedUserId: '1122615509234487396' });
+   const allowed = hasPermission(interaction.member, { minimumRole: '[SSFC] Senior Security Officer', higherRolesAllowed: true, allowedUserId: '1122615509234487396' });
     if (!allowed) return interaction.reply({ content: 'No permission!', ephemeral: true });
 
     const pid = interaction.options.getInteger('patrolid');
