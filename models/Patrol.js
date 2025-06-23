@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const patrolSchema = new mongoose.Schema({
-  hostId: { type: String, required: true },
-  channelId: { type: String, required: true },
-  scheduledTime: { type: Date, required: true },
-  attendees: { type: [String], default: [] },
+  patrolNumber: { type: Number, unique: true },
+  hostId: String,
+  channelId: String,
+  scheduledTime: Date,
+  attendees: [String],
   ended: { type: Boolean, default: false }
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('Patrol', patrolSchema);

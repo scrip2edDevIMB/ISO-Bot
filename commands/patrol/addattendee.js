@@ -10,12 +10,12 @@ module.exports = {
     .addUserOption(o => o.setName('user').setDescription('User to add').setRequired(true)),
 
   async execute(interaction) {
-   const allowed = hasPermission(interaction.member, { minimumRole: '[SSFC] Senior Security Officer', higherRolesAllowed: true, allowedUserId: '1122615509234487396' });
+    const allowed = hasPermission(interaction.member, { minimumRole: '[SSFC] Senior Security Officer', higherRolesAllowed: true, allowedUserId: '1122615509234487396' });
     if (!allowed) return interaction.reply({ content: 'No permission!', ephemeral: true });
 
     const pid = interaction.options.getInteger('patrolid');
     const target = interaction.options.getUser('user');
-    const patrol = await Patrol.findById(pid);
+    const patrol = await Patrol.findOne({ patrolNumber: pid });
     if (!patrol || patrol.ended) {
       return interaction.reply({ content: 'Invalid or finished patrol.', ephemeral: true });
     }

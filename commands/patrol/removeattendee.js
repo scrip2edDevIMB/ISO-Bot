@@ -15,7 +15,7 @@ module.exports = {
 
     const pid = interaction.options.getInteger('patrolid');
     const target = interaction.options.getUser('user');
-    const patrol = await Patrol.findById(pid);
+    const patrol = await Patrol.findOne({ patrolNumber: pid });
     if (!patrol || patrol.ended) {
       return interaction.reply({ content: 'Invalid or finished patrol.', ephemeral: true });
     }
