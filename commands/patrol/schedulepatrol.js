@@ -7,7 +7,7 @@ module.exports = {
     .setName('schedulepatrol')
     .setDescription('Schedule a new patrol.')
     .addChannelOption(o => o.setName('channel').setDescription('Channel to ping').setRequired(true))
-    .addStringOption(o => o.setName('time').setDescription('Datetime (ISO, e.g. 2025-06-30T18:00)').setRequired(true)),
+    .addStringOption(o => o.setName('time').setDescription('Datetime (ISO, e.g. 2025 year, 06 date, 30 day , T seperator, 18:00 time)').setRequired(true)),
 
   async execute(interaction, client) {
     const allowed = hasPermission(interaction.member, { minimumRole: '[SSFC] Senior Security Officer', higherRolesAllowed: true, allowedUserId: '1122615509234487396' });
