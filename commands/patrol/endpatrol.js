@@ -11,7 +11,7 @@ module.exports = {
 
   async execute(interaction) {
     const pid = interaction.options.getInteger('patrolid');
-    const patrol = await Patrol.findOne({ patrolNumber: patrolId });
+    const patrol = await Patrol.findOne({ patrolNumber: pid });
 
     if (!patrol || patrol.ended) {
       return interaction.reply({ content: 'Invalid or already ended patrol.', ephemeral: true });

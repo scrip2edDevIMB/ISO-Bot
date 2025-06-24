@@ -1,10 +1,11 @@
 // -- Varibles -- \\
 
-const { REST, Routes, Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { REST, Routes, Client, Events, GatewayIntentBits, Collection, MessageFlags } = require('discord.js');
 const { createEmbed, setBotStatus } = require("./Services")
 const dotenv = require('dotenv');
 dotenv.config();
 
+const Patrol = require('./models/Patrol.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // -- Slash Commands Handler -- \\
@@ -58,7 +59,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 
 	try {
-		await command.execute(interaction,client);
+		await command.execute(interaction, client);
 	} catch (error) {
 		console.error(error);
 		if (interaction.replied || interaction.deferred) {
@@ -74,12 +75,35 @@ client.on(Events.InteractionCreate, async interaction => {
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 	setBotStatus(client, {
-        status: 'online', // online | idle | dnd | invisible
-        activityType: 'Streaming', // Playing | Streaming | Listening | Watching | Competing
-        activityText: 'ISO Activity'
-    });
+		status: 'online', // online | idle | dnd | invisible
+		activityType: 'Streaming', // Playing | Streaming | Listening | Watching | Competing
+		activityText: 'ISO Activity'
+	});
+
+	setInterval(async () => {
+		const now = new Date();
+		const in1Min = new Date(now.getTime() + 60000);
+
+		const upcomingPatrols = await Patrol.find({
+			ended: false,
+			scheduledTime: { $gte: now, $lt: in1Min }
+		});
+
+		for (const patrol of upcomingPatrols) {
+			const hostUser = await client.users.fetch(patrol.hostId);
+			try {
+				await hostUser.send(`📣 Reminder: Your patrol is starting now in <#${patrol.channelId}>.`);
+			} catch (err) {
+				console.warn(`Could not DM user ${patrol.hostId}`);
+			}
+
+			const channel = await client.channels.fetch(patrol.channelId);
+			await channel.send(`🚨 The patrol hosted by <@${patrol.hostId}> is starting now!`);
+		}
+	}, 30000);
 });
 
 require('./OtherServices_Folder/Database.js').connectToDatabase()
+require('./OtherServices_Folder/WeeklyJob.js')
 
 client.login(process.env.TOKEN)

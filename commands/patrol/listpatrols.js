@@ -23,7 +23,7 @@ module.exports = {
 
     const lines = patrols.map((p, i) => {
       const date = new Date(p.scheduledTime).toLocaleString('en-US', { timeZone: 'UTC', hour12: true });
-      return `**#${i + 1} — ${date} UTC**\nHost: <@${p.hostId}>\nChannel: <#${p.channelId}>\nAttendees: ${p.attendees.length}\nID: \`${p._id}\``;
+      return `**#${i + 1} — ${date} UTC**\nHost: <@${p.hostId}>\nChannel: <#${p.channelId}>\nAttendees: ${p.attendees.length}\nID: \`${p.patrolNumber}\``;
     });
 
     const embed = createEmbed({

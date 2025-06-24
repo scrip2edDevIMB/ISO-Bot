@@ -50,7 +50,8 @@ module.exports = {
     const scheduledTimeUTC = estDateTime.toUTC().toJSDate();
 
     const latestPatrol = await Patrol.findOne().sort({ patrolNumber: -1 });
-    const nextNumber = latestPatrol ? latestPatrol.patrolNumber + 1 : 1;
+    const nextNumber = (latestPatrol?.patrolNumber ?? 0) + 1;
+
 
     await Patrol.create({
       patrolNumber: nextNumber,
@@ -64,7 +65,7 @@ module.exports = {
 
     const embed = createEmbed({
       title: '🗓️ Patrol Scheduled',
-      description: `**Host:** <@${interaction.user.id}>\n**Channel:** <#${channel.id}>\n**When:** ${estDateTime.toFormat('cccc, LLLL dd, yyyy • h:mm a')} EST`,
+      description: `**Host:** <@${interaction.user.id}>\n**Channel:** <#${channel.id}>\n**When:** ${estDateTime.toFormat('cccc, LLLL dd, yyyy • h:mm a')} EST\n **Patrol ID:** ${nextNumber}`,
       color: '#27ae60'
     });
 

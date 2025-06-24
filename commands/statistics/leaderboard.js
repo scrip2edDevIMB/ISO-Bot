@@ -19,15 +19,25 @@ module.exports = {
 			return interaction.reply({ embeds: [embed], ephemeral: true });
 		}
 
-		const leaderboard = users.map((user, index) => {
-			const member = interaction.guild.members.cache.get(user.discordId);
-			const displayName = member ? member.displayName : user.discordId;
-			return `**${index + 1}.** ${displayName} — \`${user.minutes} minutes\``;
-		}).join('\n');
+		const leaderboardLines = [];
+
+		for (let i = 0; i < users.length; i++) {
+			const user = users[i];
+			let displayName = `User Not Found: ${user.discordId}`;
+
+			try {
+				const member = await interaction.guild.members.fetch(user.discordId);
+				displayName = member.displayName || member.user.username;
+			} catch (err) {
+				console.warn(`Could not fetch member ${user.discordId}:`, err.message);
+			}
+
+			leaderboardLines.push(`**${i + 1}.** ${displayName} — \`${user.minutes} minutes\` — \`${user.patrols} session(s)\``);
+		}
 
 		const embed = createEmbed({
 			title: '🏆 Weekly Leaderboard',
-			description: leaderboard,
+			description: leaderboardLines.join('\n'),
 			color: '#f1c40f'
 		});
 
