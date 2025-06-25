@@ -30,8 +30,8 @@ module.exports = {
 			await user.save();
 
 			const embed = createEmbed({
-				title: 'Tracking Stopped',
-				description: `Session ended. Added ${minutes} minutes.`,
+				title: 'Patrol Stopped',
+				description: `Your Patrol has ended. Added ${minutes} minutes.`,
 				color: '#3498db'
 			});
 			return interaction.reply({ embeds: [embed], ephemeral: false });
@@ -41,8 +41,8 @@ module.exports = {
 			await user.save();
 
 			const embed = createEmbed({
-				title: 'Tracking Started',
-				description: 'You are now being tracked for time.',
+				title: 'Patrol Started',
+				description: 'Your time in-game is now being tracked. Please remember to stop tracking when you finish or your minutes will not be counted.',
 				color: '#1abc9c'
 			});
 			return interaction.reply({ embeds: [embed], ephemeral: true });

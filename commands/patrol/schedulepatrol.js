@@ -7,11 +7,6 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('schedulepatrol')
     .setDescription('Schedule a new patrol.')
-    .addChannelOption(option =>
-      option.setName('channel')
-        .setDescription('Channel to ping for the patrol')
-        .setRequired(true)
-    )
     .addStringOption(option =>
       option.setName('date')
         .setDescription('Date in format YYYY-MM-DD (e.g. 2025-06-30)')
@@ -34,7 +29,7 @@ module.exports = {
 
     const dateStr = interaction.options.getString('date');
     const timeStr = interaction.options.getString('time');
-    const channel = interaction.options.getChannel('channel');
+    const channel = 1299211801111695421;
 
     const estDateTime = DateTime.fromFormat(`${dateStr} ${timeStr}`, 'yyyy-MM-dd HH:mm', {
       zone: 'America/New_York'
@@ -56,7 +51,7 @@ module.exports = {
     await Patrol.create({
       patrolNumber: nextNumber,
       hostId: interaction.user.id,
-      channelId: channel.id,
+      channelId: channel,
       scheduledTime: scheduledTimeUTC,
       attendees: [],
       ended: false
@@ -65,7 +60,7 @@ module.exports = {
 
     const embed = createEmbed({
       title: '🗓️ Patrol Scheduled',
-      description: `**Host:** <@${interaction.user.id}>\n**Channel:** <#${channel.id}>\n**When:** ${estDateTime.toFormat('cccc, LLLL dd, yyyy • h:mm a')} EST\n **Patrol ID:** ${nextNumber}`,
+      description: `**Host:** <@${interaction.user.id}>\n**Channel:** <#${channel}>\n**When:** ${estDateTime.toFormat('cccc, LLLL dd, yyyy • h:mm a')} EST\n **Patrol ID:** ${nextNumber}`,
       color: '#27ae60'
     });
 
