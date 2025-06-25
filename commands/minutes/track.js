@@ -24,10 +24,7 @@ module.exports = {
 		if (user.isTracking) {
 			const now = new Date();
 			const minutes = Math.floor((now - user.trackingStart) / 60000);;
-			if (isNaN(minutes)) {
-				return interaction.reply({ content: '❌ Could not calculate a valid minute value.', ephemeral: true });
-			}
-			user.minutes = minutesToAdd;
+			user.minutes += minutes;
 
 			user.isTracking = false;
 			user.trackingStart = null;
