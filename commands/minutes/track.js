@@ -8,7 +8,7 @@ module.exports = {
 		.setDescription('Start or stop tracking your time (toggles).'),
 
 	async execute(interaction) {
-		const allowed = hasPermission(interaction.member, {minimumRole: '[CT] Cadet', higherRolesAllowed: true, allowedUserId: '1122615509234487396'});
+		const allowed = hasPermission(interaction.member, { minimumRole: '[CT] Cadet', higherRolesAllowed: true, allowedUserId: '1122615509234487396' });
 		if (!allowed) return interaction.reply({ content: 'You do not have permission!', ephemeral: true });
 
 		const user = await User.findOne({ discordId: interaction.user.id });
@@ -24,7 +24,13 @@ module.exports = {
 		if (user.isTracking) {
 			const now = new Date();
 			const minutes = Math.floor((now - user.trackingStart) / 60000);
-			user.minutes += minutes;
+			const minutesToAdd = Number(calculatedMinutes);
+			if (isNaN(minutesToAdd)) {
+				return interaction.reply({ content: '❌ Could not calculate a valid minute value.', ephemeral: true });
+			}
+
+			user.minutes = Number(user.minutes || 0) + minutesToAdd;
+
 			user.isTracking = false;
 			user.trackingStart = null;
 			await user.save();
